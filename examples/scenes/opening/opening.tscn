@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cscjdiiqw172m"]
+
+[ext_resource type="PackedScene" uid="uid://sikc02ddepyt" path="res://addons/maaacks_menus_template/base/nodes/opening/opening.tscn" id="1_7j67i"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xh6ks"]
+load_path = "res://.godot/imported/logo_vertical_color_dark.png-c50ba117d6dd29af316dd3d1cfa60f49.ctex"
+
+[node name="Opening" instance=ExtResource("1_7j67i")]
+images = Array[Texture2D]([SubResource("CompressedTexture2D_xh6ks")])
+
+[node name="ImagesContainer" parent="." index="2"]
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
