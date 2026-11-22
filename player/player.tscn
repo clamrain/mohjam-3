@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://d3eosn8fsn87l"]
+
+[ext_resource type="Script" uid="uid://bscdrc3ff5aqo" path="res://player/player.gd" id="1_oul6g"]
+[ext_resource type="Shader" uid="uid://cc0whwd828x21" path="res://rendering/ps1-pp.gdshader" id="2_boad6"]
+[ext_resource type="Script" uid="uid://i26hhurv68fv" path="res://player/hand_sprite.gd" id="3_g1dw6"]
+[ext_resource type="Script" uid="uid://spclfaw6vim8" path="res://state-machine/state_machine.gd" id="3_g6k8r"]
+[ext_resource type="Script" uid="uid://ywyc71oxhvnb" path="res://player/states/idle.gd" id="16_c35mf"]
+[ext_resource type="Script" uid="uid://ray80ctwk83e" path="res://player/states/walking.gd" id="17_65viv"]
+[ext_resource type="Script" uid="uid://dmdflcji5806o" path="res://player/states/airborne.gd" id="18_x7c3f"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kqu6x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g6k8r"]
+render_priority = 0
+shader = ExtResource("2_boad6")
+shader_parameter/color_depth = 6
+shader_parameter/dithering = true
+shader_parameter/resolution_scale = 4
+
+[sub_resource type="QuadMesh" id="QuadMesh_x7c3f"]
+size = Vector2(2, 2)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_yllr7"]
+streams_count = 4
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_cypd4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pq06o"]
+albedo_texture = SubResource("PlaceholderTexture2D_cypd4")
+uv1_scale = Vector3(5.6, 5.6, 5.6)
+texture_filter = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_4l3e8"]
+material = SubResource("StandardMaterial3D_pq06o")
+
+[node name="Player" type="CharacterBody3D" unique_id=347943817]
+script = ExtResource("1_oul6g")
+jump_up_velocity = 6.0
+footstep_frequency = 150.0
+momentum_scale = 0.5
+momentum_retention = 0.75
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1383565815]
+shape = SubResource("CylinderShape3D_kqu6x")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=425457945]
+current = true
+
+[node name="PostProcessingShader" type="MeshInstance3D" parent="Camera3D" unique_id=2112331768]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+material_override = SubResource("ShaderMaterial_g6k8r")
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_x7c3f")
+
+[node name="HandItem" type="Node3D" parent="Camera3D" unique_id=1348362291]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.452, -0.251, -0.418)
+script = ExtResource("3_g1dw6")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D" unique_id=1065752329]
+visible = false
+light_color = Color(0.972982, 0.973236, 0.928868, 1)
+light_energy = 2.0
+distance_fade_enabled = true
+spot_range = 60.0
+spot_attenuation = 0.13
+spot_angle = 43.83
+spot_angle_attenuation = 2.2974
+
+[node name="FootstepASP" type="AudioStreamPlayer" parent="." unique_id=1565364116]
+stream = SubResource("AudioStreamRandomizer_yllr7")
+
+[node name="DamageASP" type="AudioStreamPlayer" parent="." unique_id=1312032847]
+
+[node name="DamageTimer" type="Timer" parent="." unique_id=1792683523]
+wait_time = 0.15
+autostart = true
+
+[node name="StateMachine" type="Node" parent="." unique_id=1317988809 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_g6k8r")
+initial_state = NodePath("idle")
+
+[node name="idle" type="Node" parent="StateMachine" unique_id=1001275407]
+script = ExtResource("16_c35mf")
+
+[node name="walking" type="Node" parent="StateMachine" unique_id=71821158]
+script = ExtResource("17_65viv")
+
+[node name="airborne" type="Node" parent="StateMachine" unique_id=1926361738]
+script = ExtResource("18_x7c3f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1214199710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2136266)
+visible = false
+mesh = SubResource("SphereMesh_4l3e8")

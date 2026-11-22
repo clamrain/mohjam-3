@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="WeatherEvent" format=3 uid="uid://bbslls4jqbtd"]
+
+[ext_resource type="Script" uid="uid://bhlkd1283mcju" path="res://events/weather_event.gd" id="1_8fb6i"]
+[ext_resource type="Script" uid="uid://bwt550wyo21r0" path="res://events/event_prop.gd" id="2_tpqmp"]
+
+[sub_resource type="Resource" id="Resource_2x207"]
+script = ExtResource("2_tpqmp")
+id = NodePath("WorldEnvironment:environment:volumetric_fog_albedo")
+target_value = Color(0.348, 0.58, 0.46786666, 1)
+duration = 20.0
+metadata/_custom_type_script = "uid://bwt550wyo21r0"
+
+[sub_resource type="Resource" id="Resource_1p1aj"]
+script = ExtResource("2_tpqmp")
+id = NodePath("DirectionalLight3D:light_energy")
+target_value = 0.0
+duration = 5.0
+metadata/_custom_type_script = "uid://bwt550wyo21r0"
+
+[sub_resource type="Resource" id="Resource_ujcxi"]
+script = ExtResource("2_tpqmp")
+id = NodePath("WorldEnvironment:environment:volumetric_fog_density")
+target_value = 0.1
+duration = 20.0
+metadata/_custom_type_script = "uid://bwt550wyo21r0"
+
+[sub_resource type="Resource" id="Resource_8fb6i"]
+script = ExtResource("2_tpqmp")
+id = NodePath("WorldEnvironment:environment:ambient_light_energy")
+target_value = 0.0
+duration = 5.0
+metadata/_custom_type_script = "uid://bwt550wyo21r0"
+
+[sub_resource type="Resource" id="Resource_tpqmp"]
+script = ExtResource("2_tpqmp")
+id = NodePath("WorldEnvironment:environment:volumetric_fog_emission")
+target_value = Color(0.348, 0.58, 0.46786666, 1)
+duration = 20.0
+metadata/_custom_type_script = "uid://bwt550wyo21r0"
+
+[resource]
+script = ExtResource("1_8fb6i")
+tracked_props = Array[ExtResource("2_tpqmp")]([SubResource("Resource_2x207"), SubResource("Resource_1p1aj"), SubResource("Resource_ujcxi"), SubResource("Resource_8fb6i"), SubResource("Resource_tpqmp")])
+metadata/_custom_type_script = "uid://bhlkd1283mcju"

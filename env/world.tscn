@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://diq0iemouqayc"]
+
+[ext_resource type="Script" uid="uid://co5yh8n22stpn" path="res://env/world.gd" id="1_txwho"]
+[ext_resource type="PackedScene" uid="uid://d3eosn8fsn87l" path="res://player/player.tscn" id="1_v2pcc"]
+[ext_resource type="PackedScene" uid="uid://gair34h5au13" path="res://env/boat.tscn" id="2_xnlwn"]
+[ext_resource type="Script" uid="uid://spclfaw6vim8" path="res://state-machine/state_machine.gd" id="3_41srq"]
+[ext_resource type="PackedScene" uid="uid://craer3uahu732" path="res://env/ocean.tscn" id="4_gia3y"]
+[ext_resource type="Script" uid="uid://bqaurt3dx7lcr" path="res://env/weather_state.gd" id="4_xnlwn"]
+[ext_resource type="Resource" uid="uid://bbslls4jqbtd" path="res://env/weather/murky.tres" id="5_ehnpl"]
+[ext_resource type="Script" uid="uid://bh08dk8t4wajw" path="res://events/event.gd" id="8_2x207"]
+[ext_resource type="Resource" uid="uid://kygq1b70vwxx" path="res://env/weather/normal.tres" id="9_2x207"]
+[ext_resource type="Script" uid="uid://ddj1tg0ocom15" path="res://events/event_controller.gd" id="10_nxm4b"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1p1aj"]
+frequency = 0.587
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_2x207"]
+noise = SubResource("FastNoiseLite_1p1aj")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q22xs"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_v2pcc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ibx6d"]
+albedo_texture = SubResource("PlaceholderTexture2D_v2pcc")
+uv1_triplanar = true
+texture_filter = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_r77dm"]
+material = SubResource("StandardMaterial3D_ibx6d")
+size = Vector3(10, 1, 10)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bdoiv"]
+
+[sub_resource type="Sky" id="Sky_2x207"]
+sky_material = SubResource("ProceduralSkyMaterial_bdoiv")
+
+[sub_resource type="Environment" id="Environment_1p1aj"]
+background_mode = 2
+sky = SubResource("Sky_2x207")
+ambient_light_source = 2
+ambient_light_color = Color(0.34901962, 0.5803922, 0.46666667, 1)
+ambient_light_energy = 0.0
+tonemap_mode = 3
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.40784314, 0.6784314, 0.627451, 1)
+fog_light_energy = 0.0
+fog_density = 1.0
+fog_depth_begin = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(0.40685397, 0.6777295, 0.62774736, 1)
+volumetric_fog_emission = Color(0.40784314, 0.6784314, 0.627451, 1)
+volumetric_fog_emission_energy = 0.1
+volumetric_fog_length = 100.0
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_2x207"]
+
+[node name="World" type="Node3D" unique_id=1885206356]
+script = ExtResource("1_txwho")
+
+[node name="Ocean" parent="." unique_id=1682986744 node_paths=PackedStringArray("offset_target") instance=ExtResource("4_gia3y")]
+offset_target = NodePath("../Barco")
+ocean_wave_velocity = Vector2(0.4, 0)
+ocean_wave_height = 0.73
+ocean_wave_frequency = 0.245
+ocean_random_noise = SubResource("NoiseTexture3D_2x207")
+
+[node name="Barco" parent="." unique_id=1984134784 instance=ExtResource("2_xnlwn")]
+transform = Transform3D(0.9859031, 0.16731739, 4.1434765e-11, -0.16731739, 0.9859031, -7.0318846e-12, -4.202722e-11, 0, 1, 0, -0.13855629, 0)
+
+[node name="OmniLight3D" parent="Barco" index="2" unique_id=1069310934]
+light_energy = 0.7
+omni_range = 16.0
+omni_attenuation = 1.5
+
+[node name="OmniLight3D2" parent="Barco" index="3" unique_id=1601207262]
+light_energy = 0.7
+omni_range = 16.0
+omni_attenuation = 1.5
+
+[node name="StaticBody3D" type="AnimatableBody3D" parent="." unique_id=1946226583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 52.77, -78.953)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2036881564]
+shape = SubResource("BoxShape3D_q22xs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1153209476]
+mesh = SubResource("BoxMesh_r77dm")
+
+[node name="Player" parent="." unique_id=444012803 instance=ExtResource("1_v2pcc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7518091, 3.1862197, 0)
+floor_max_angle = 1.4835298
+speed = 1.5
+jump_up_velocity = 4.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=831450697]
+environment = SubResource("Environment_1p1aj")
+camera_attributes = SubResource("CameraAttributesPhysical_2x207")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2087574483]
+transform = Transform3D(1, 0, 0, 0, -0.99999994, 8.742277e-08, 0, -8.742277e-08, -0.99999994, 0, 4, 0)
+
+[node name="WeatherStateMachine" type="Node" parent="." unique_id=1097446034 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_41srq")
+initial_state = NodePath("calm")
+metadata/_custom_type_script = "uid://spclfaw6vim8"
+
+[node name="calm" type="Node" parent="WeatherStateMachine" unique_id=720630593 node_paths=PackedStringArray("next_state", "__apply_weather_world")]
+script = ExtResource("4_xnlwn")
+duration_sec = 60
+next_state = NodePath("../madness")
+events = Array[ExtResource("8_2x207")]([ExtResource("9_2x207")])
+sun_angle_start = 180.0
+sun_angle_end = 360.0
+__apply_weather_res = ExtResource("9_2x207")
+__apply_weather_world = NodePath("../..")
+metadata/_custom_type_script = "uid://yu7ocf8w215t"
+
+[node name="madness" type="Node" parent="WeatherStateMachine" unique_id=823954604 node_paths=PackedStringArray("next_state", "__apply_weather_world")]
+script = ExtResource("4_xnlwn")
+duration_sec = 60
+next_state = NodePath("../calm")
+events = Array[ExtResource("8_2x207")]([ExtResource("5_ehnpl")])
+sun_angle_end = 180.0
+__apply_weather_res = ExtResource("5_ehnpl")
+__apply_weather_world = NodePath("../..")
+metadata/_custom_type_script = "uid://yu7ocf8w215t"
+
+[node name="EventController" type="Node" parent="." unique_id=919539181 node_paths=PackedStringArray("world")]
+script = ExtResource("10_nxm4b")
+world = NodePath("..")
+metadata/_custom_type_script = "uid://ddj1tg0ocom15"
+
+[editable path="Barco"]

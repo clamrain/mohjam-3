@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://craer3uahu732"]
+
+[ext_resource type="Script" uid="uid://c742gbyh7awc7" path="res://env/ocean.gd" id="1_gt416"]
+[ext_resource type="Shader" uid="uid://b7say5w68uhcn" path="res://env/water_ci.gdshader" id="2_gt416"]
+[ext_resource type="Shader" uid="uid://82ym1v67ye82" path="res://rendering/ps1_ocean.gdshader" id="3_rkd0a"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_r77dm"]
+noise_type = 2
+fractal_octaves = 3
+fractal_lacunarity = 1.145
+fractal_gain = 1.115
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ibx6d"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_r77dm")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_txwho"]
+noise_type = 2
+fractal_octaves = 3
+fractal_lacunarity = 1.145
+fractal_gain = 1.115
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xnlwn"]
+width = 1024
+height = 1024
+noise = SubResource("FastNoiseLite_txwho")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 1.0
+bump_strength = 18.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xnlwn"]
+shader = ExtResource("2_gt416")
+shader_parameter/water_albedo = Color(0.30383, 0.481499, 0.427535, 1)
+shader_parameter/water_texture = SubResource("NoiseTexture2D_ibx6d")
+shader_parameter/water_texture_normal = SubResource("NoiseTexture2D_xnlwn")
+shader_parameter/animation_speed = 2.0
+shader_parameter/animation_freq = 16.0
+shader_parameter/animation_ampl = 0.005
+shader_parameter/resolution = 256
+shader_parameter/spikiness = 2.550000121125
+shader_parameter/sig_contrast = 15.322000727795
+shader_parameter/sig_brightness = 0.5210000247475
+shader_parameter/uv_scale = 1.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rkd0a"]
+viewport_path = NodePath("Ocean/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aiymq"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_rkd0a")
+shader_parameter/albedo_texture = SubResource("ViewportTexture_rkd0a")
+shader_parameter/vertex_jitter_amount = 0.6130000291175
+shader_parameter/jitter_z_coordinate = true
+shader_parameter/jitter_depth_independent = true
+shader_parameter/affine_texture_mapping = false
+shader_parameter/alpha_scissor_threshold = 1.0
+shader_parameter/uv_scale_x = 16.00000076
+shader_parameter/uv_scale_y = 16.00000076
+shader_parameter/ocean_wave_velocity = Vector2(1, 0)
+shader_parameter/ocean_wave_height = 0.2
+shader_parameter/ocean_wave_frequency = 0.2
+shader_parameter/time = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_pq06o"]
+material = SubResource("ShaderMaterial_aiymq")
+size = Vector2(16, 16)
+subdivide_width = 15
+subdivide_depth = 15
+orientation = 1
+
+[node name="Ocean" type="Node3D" unique_id=1682986744 node_paths=PackedStringArray("offset_target")]
+script = ExtResource("1_gt416")
+offset_target = NodePath("Marker3D")
+radius = 8
+ocean_wave_velocity = Vector2(1, 0)
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1613835585]
+disable_3d = true
+
+[node name="ColorRect" type="ColorRect" parent="SubViewport" unique_id=2050789998]
+material = SubResource("ShaderMaterial_xnlwn")
+custom_minimum_size = Vector2(512, 512)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TemplateMesh" type="MeshInstance3D" parent="." unique_id=1297508686]
+visible = false
+mesh = SubResource("QuadMesh_pq06o")
+
+[node name="Chunks" type="Node3D" parent="." unique_id=534314522]
+
+[node name="Marker3D" type="Marker3D" parent="." unique_id=2092744989]
+transform = Transform3D(0.9999026, 0.013957184, -1.5587448e-10, -0.013957184, 0.9999026, 2.1757806e-12, 1.5588966e-10, 0, 1, 0, -0.17946844, 0)

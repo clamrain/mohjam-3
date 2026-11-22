@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeatherEvent" format=3 uid="uid://bliwia6o4s3yk"]
+
+[ext_resource type="Script" uid="uid://bhlkd1283mcju" path="res://events/weather_event.gd" id="1_s0h4q"]
+[ext_resource type="Script" uid="uid://bwt550wyo21r0" path="res://events/event_prop.gd" id="2_lnvk0"]
+
+[sub_resource type="Resource" id="Resource_s0h4q"]
+script = ExtResource("2_lnvk0")
+id = NodePath("WorldEnvironment:environment:volumetric_fog_density")
+target_value = 1.0
+duration = 2.0
+metadata/_custom_type_script = "uid://bwt550wyo21r0"
+
+[sub_resource type="Resource" id="Resource_lnvk0"]
+script = ExtResource("2_lnvk0")
+id = NodePath("WorldEnvironment:environment:volumetric_fog_albedo")
+target_value = Color(0.555, 0.75, 0.70774996, 1)
+duration = 2.0
+metadata/_custom_type_script = "uid://bwt550wyo21r0"
+
+[resource]
+script = ExtResource("1_s0h4q")
+tracked_props = Array[ExtResource("2_lnvk0")]([SubResource("Resource_s0h4q"), SubResource("Resource_lnvk0")])
+metadata/_custom_type_script = "uid://bhlkd1283mcju"
